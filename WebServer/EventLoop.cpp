@@ -82,6 +82,7 @@ void EventLoop::runInLoop(Functor&& cb) {
 void EventLoop::queueInLoop(Functor&& cb) {
   cout<<"queueInLoop ing "<<endl;
   cout<<"queueInLoop this "<<(void *)this<<endl;
+  cout<<"tid : "<<CurrentThread::tid()<<endl;
   {
     MutexLockGuard lock(mutex_);
   cout<<"queueInLoop ing 2"<<endl;
@@ -117,6 +118,8 @@ void EventLoop::loop() { //在哪个线程建立的对象，就在哪个线程�
 
 void EventLoop::doPendingFunctors() {
   cout<<"doPendingFunctors this "<<(void *)this<<endl;
+  cout<<"tid : "<<CurrentThread::tid()<<endl;
+
   std::vector<Functor> functors;
   callingPendingFunctors_ = true;
   {
