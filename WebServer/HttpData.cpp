@@ -215,7 +215,7 @@ HttpData::HttpData(EventLoop *loop, int connfd)
   src_fd=0;
   if (runMode)
   {
-    application_default_prefix=runMode==1?application_path_prefix1:application_path_prefix2;
+    application_default_prefix=runMode==1?application_path_prefix1:runMode==2?application_path_prefix2:path_prefix;
     seed = time(0);//随机数种子，随机列表中的某个MMD文件播放
     srand(seed);
     //FindFiles(this,application_path_prefix,file_lists);
