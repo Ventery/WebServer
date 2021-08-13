@@ -75,7 +75,8 @@ class HttpData : public std::enable_shared_from_this<HttpData> {
   HttpData(EventLoop *loop, int connfd);
   ~HttpData() 
   { 
-    close(fd_); 
+    int i=close(fd_); 
+    if (i<0) printf("close faild\n");
     printf("in destructor %d closed!\n",fd_);
   }
   void reset();
