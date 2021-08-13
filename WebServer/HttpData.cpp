@@ -26,7 +26,7 @@ const int DEFAULT_KEEP_ALIVE_TIME = 15 * 1000;  // ms
 const long RESPOND_LENGTH = 20*1024*1024;   //bytes
 const int CACHE_CONTROL = 60*30;   //seconds
 
-const std::string HTML_DOMAIN="http://127.0.0.1:39000/";
+const std::string HTML_DOMAIN="http://175.27.133.90:39000/";
 const std::string HTML_HEAD="<!DOCTYPE html><html><head><meta charset=\"utf-8\">";
 const std::string HTML_TAIL="</body></html>";
 
