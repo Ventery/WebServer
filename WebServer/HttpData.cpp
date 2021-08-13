@@ -220,7 +220,6 @@ HttpData::HttpData(EventLoop *loop, int connfd)
     srand(seed);
     //FindFiles(this,application_path_prefix,file_lists);
   }
-  else application_default_prefix="/";
 }
 
 void HttpData::reset() {
