@@ -80,9 +80,13 @@ void EventLoop::runInLoop(Functor&& cb) {
 }
 
 void EventLoop::queueInLoop(Functor&& cb) {
+  cout<<"queueInLoop ing "<<endl;
   {
     MutexLockGuard lock(mutex_);
+  cout<<"queueInLoop ing 2"<<endl;
     pendingFunctors_.emplace_back(std::move(cb));//右值为参数时候push_back也行，内部调用的也是emplace_back。只是直接emplace_back少一层调用快一点
+    cout<<"queueInLoop ing 3"<<endl;
+    cout<<"pendingFunctors_ size "<<pendingFunctors_.size()<<endl;
   }
 
   if (!isInLoopThread() || callingPendingFunctors_) wakeup();
