@@ -319,7 +319,7 @@ void HttpData::handleRead() {
       if (headers_.find("Content-length") != headers_.end()) {
         content_length = stoi(headers_["Content-length"]);
       } else {
-        // cout << "(state_ == STATE_RECV_BODY)" << endl;
+        cout << "(state_ == STATE_RECV_BODY)" << endl;
         error_ = true;
         handleError(fd_, 400, "Bad Request: Lack of argument (Content-length)");
         break;
@@ -337,7 +337,7 @@ void HttpData::handleRead() {
       } 
       else 
       {
-        // cout << "state_ == STATE_ANALYSIS" << endl;
+        cout << "state_ == STATE_ANALYSIS" << endl;
         error_ = true;
         break;
       }
