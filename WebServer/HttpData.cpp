@@ -1002,7 +1002,7 @@ void HttpData::handleClose() { //关闭的条件有两个，1超时（实际上�
 }
 
 void HttpData::newEvent() {
-  cout<<"new sock is coming to thread!"<<endl;
+  cout<<"new sock is coming to thread!" <<" "<<channel_->getFd()<<endl;
   channel_->setEvents(DEFAULT_EVENT);
   loop_->addToPoller(channel_, DEFAULT_EXPIRED_TIME);
 }
