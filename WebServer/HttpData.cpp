@@ -433,8 +433,8 @@ void HttpData::handleConn() {
   }
   else
   { //解析出错了直接结束
-    cout << "close with errors" << error_ << endl;
-    cout << "connectionState  :" << connectionState_ << endl;
+    cout << "close with errors  : " << error_ << endl;
+    cout << "connectionState  : " << connectionState_ << endl;
     loop_->runInLoop(bind(&HttpData::handleClose, shared_from_this()));
   }
 }
@@ -999,6 +999,7 @@ void HttpData::handleClose() { //关闭的条件有两个，1超时（实际上�
 }
 
 void HttpData::newEvent() {
+  cout<<"new sock is coming to thread!"<<endl;
   channel_->setEvents(DEFAULT_EVENT);
   loop_->addToPoller(channel_, DEFAULT_EXPIRED_TIME);
 }
