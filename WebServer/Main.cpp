@@ -9,9 +9,9 @@ int runMode = 0;
 
 
 int main(int argc, char *argv[]) {
-#if defined DEBUG_HP
+#if defined DEBUG_VERSION
   printf("Defined DEBUG_VERSION!\n");
-  #elif defined RELEASE_HP
+  #elif defined RELEASE_VERSION
   printf("Defined RELEASE_VERSION!\n");
   daemon( 0, 0);
   #else
