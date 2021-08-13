@@ -103,7 +103,7 @@ void EventLoop::loop() { //在哪个线程建立的对象，就在哪个线程�
     eventHandling_ = true;
     for (auto& it : ret) it->handleEvents();
     eventHandling_ = false;
-    cout<<"pendingFunctors_ size: "<<pendingFunctors_<<endl;
+    cout<<"pendingFunctors_ size: "<<pendingFunctors_.size()<<endl;
     doPendingFunctors();
     poller_->handleExpired();
   }
