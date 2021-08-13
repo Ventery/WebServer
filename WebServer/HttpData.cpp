@@ -433,8 +433,8 @@ void HttpData::handleConn() {
   }
   else
   { //解析出错了直接结束
-    cout << "close with errors  : " << error_ << endl;
-    cout << "connectionState  : " << connectionState_ << endl;
+    //cout << "close with errors  : " << error_ << endl;
+    //cout << "connectionState  : " << connectionState_ << endl;
     loop_->runInLoop(bind(&HttpData::handleClose, shared_from_this()));
   }
 }
@@ -971,7 +971,7 @@ void HttpData::handleError(int fd, int err_num, string short_msg) {
 }
 
 void HttpData::handleClose() { //关闭的条件有两个，1超时（实际上只有pop了才算真正删除），2解析出错
-  cout<<"Close!!!!" <<channel_->getFd()<<endl;
+  //cout<<"Close!!!!" <<channel_->getFd()<<endl;
   if (mmapRet)//此处才真正关闭视频文件的映射
   {
     weak_ptr<void*> tpr = mmapRet;
@@ -997,7 +997,7 @@ void HttpData::handleClose() { //关闭的条件有两个，1超时（实际上�
   connectionState_ = H_DISCONNECTED;
   //shared_ptr<HttpData> guard(shared_from_this());
   loop_->removeFromPoller(channel_);
-  cout<<"Close!!!!" <<channel_->getFd() <<"  over!"<<endl;
+  //cout<<"Close!!!!" <<channel_->getFd() <<"  over!"<<endl;
 
 }
 
