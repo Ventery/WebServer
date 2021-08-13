@@ -971,6 +971,7 @@ void HttpData::handleError(int fd, int err_num, string short_msg) {
 }
 
 void HttpData::handleClose() { //关闭的条件有两个，1超时（实际上只有pop了才算真正删除），2解析出错
+  cout<<"Close!!!!"<<endl;
   if (mmapRet)//此处才真正关闭视频文件的映射
   {
     weak_ptr<void*> tpr = mmapRet;
