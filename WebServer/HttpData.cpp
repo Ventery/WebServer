@@ -433,7 +433,7 @@ void HttpData::handleConn() {
   } 
   else 
   {//解析出错了直接结束
-    cout << "close with errors" << endl;
+    cout << "close with errors" << error_ <<endl;
     loop_->runInLoop(bind(&HttpData::handleClose, shared_from_this()));
   }
 }
