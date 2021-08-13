@@ -253,8 +253,7 @@ void HttpData::handleRead() {
   do {
     bool zero = false;
     int read_num = readn(fd_, inBuffer_, zero);
-    cout<<channel_->getFd()<<"  :"<<endl;
-    LOG << "Request( " << read_num << " bytes ):\n" << inBuffer_;
+    LOG << channel_->getFd()<<"  :"<<"Request( " << read_num << " bytes ):\n" << inBuffer_;
     if (connectionState_ == H_DISCONNECTING) {
       inBuffer_.clear();
       break;
