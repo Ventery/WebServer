@@ -73,7 +73,11 @@ class MimeType {
 class HttpData : public std::enable_shared_from_this<HttpData> {
  public:
   HttpData(EventLoop *loop, int connfd);
-  ~HttpData() { close(fd_); }
+  ~HttpData() 
+  { 
+    close(fd_); 
+    printf("in destructor %d closed!\n",fd_);
+  }
   void reset();
   void seperateTimer();
   void linkTimer(std::shared_ptr<TimerNode> mtimer) {
