@@ -8,13 +8,13 @@
 #include "base/Logging.h"
 
 Server::Server(EventLoop *loop, int threadNum, int port)
-    : loop_(loop),
-      threadNum_(threadNum),
-      eventLoopThreadPool_(new EventLoopThreadPool(loop_, threadNum)),
-      started_(false),
-      acceptChannel_(new Channel(loop_)),
-      port_(port),
-      listenFd_(socket_bind_listen(port_)) {
+  : loop_(loop),
+    threadNum_(threadNum),
+    eventLoopThreadPool_(new EventLoopThreadPool(loop_, threadNum)),
+    started_(false),
+    acceptChannel_(new Channel(loop_)),
+    port_(port),
+    listenFd_(socket_bind_listen(port_)) {
   acceptChannel_->setFd(listenFd_);
   handle_for_sigpipe();
   if (setSocketNonBlocking(listenFd_) < 0) {
@@ -42,7 +42,7 @@ void Server::handNewConn() {
                              &client_addr_len)) > 0) {
     EventLoop *loop = eventLoopThreadPool_->getNextLoop();
     LOG << "New connection from " << inet_ntoa(client_addr.sin_addr) << ":"
-        << ntohs(client_addr.sin_port);
+        << ntohs(client_addr.sin_port) << " fd : " << accept_fd;
     // cout << "new connection" << endl;
     // cout << inet_ntoa(client_addr.sin_addr) << endl;
     // cout << ntohs(client_addr.sin_port) << endl;
