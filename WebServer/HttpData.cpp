@@ -890,6 +890,7 @@ AnalysisState HttpData::analysisRequest()
           //printf("file mmap :OX%p\n",*mmapRet);
           if (*mmapRet == (void *)-1) {
             mmapRet=nullptr;
+            cout<<"filename: "<<filename_full<<endl;
             perror("munmap failed");
             outBuffer_.clear();
             handleError(fd_, 404, "Not Found!");
