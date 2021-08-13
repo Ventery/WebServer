@@ -164,7 +164,7 @@ std::string getMime(std::string& filename)
       return MimeType::getMime(filename.substr(dot_pos));
 }
 typedef std::vector<std::string>::iterator vec_itor;
-bool cmp(string &p1, string &p2)
+bool cmp(const string &p1, const string &p2)
 {
   size_t pos1=p1.find('.'),pos2=p2.find('.');
     if (pos1!=std::string::npos&&pos2!=std::string::npos
