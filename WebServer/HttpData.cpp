@@ -818,7 +818,7 @@ AnalysisState HttpData::analysisRequest()
         {
           stat((application_path_prefix + file_lists[num]).c_str(), &tp_sbuf);
           if (tp_sbuf.st_size<2*1024)
-            TITLE+="<object width="1000" data=\""+std::string("/source.txt?") + application_path_prefix + file_lists[num]+"\"></object>";
+            TITLE+=string("<object width="1000" data=\"")+std::string("/source.txt?") + application_path_prefix + file_lists[num]+"\"></object>";
           else TITLE+="文件过大无法预览";
         }
       }
