@@ -814,6 +814,13 @@ AnalysisState HttpData::analysisRequest()
           TITLE += HTML_PIC_HEAD + application_path_prefix + file_lists[num + 1 < file_lists.size() ? num + 1 : 0] + HTML_PIC_MID + application_path_prefix + file_lists[num] + HTML_PIC_TAIL; //点击图片下一张
           TITLE += SUB_TITLE + "<body>";
         }
+        else
+        {
+          stat((application_path_prefix + file_lists[num]).c_str(), &tp_sbuf);
+          if (tp_sbuf.st_size<2*1024)
+            TITLE+="<object width="1000" data=\""+std::string("/source.txt?") + application_path_prefix + file_lists[num]+"\"></object>";
+          else TITLE+="文件过大无法预览";
+        }
       }
       CONTENT += "<a>共" + to_string(file_lists.size() + 1) + "项</a><br>";
       CONTENT += "<a href=\"" + HTML_DOMAIN + "index.html?" + UP_LEVEL_DIR + "\">" + ".." + "\\" + "</a><br>"; //返回上层目录
