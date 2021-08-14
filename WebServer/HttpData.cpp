@@ -319,7 +319,7 @@ void HttpData::handleRead() {
       if (headers_.find("Content-length") != headers_.end()) {
         content_length = stoi(headers_["Content-length"]);
       } else {
-        cout << "(state_ == STATE_RECV_BODY)" << endl;
+        //cout << "(state_ == STATE_RECV_BODY)" << endl;
         error_ = true;
         handleError(fd_, 400, "Bad Request: Lack of argument (Content-length)");
         break;
@@ -337,7 +337,7 @@ void HttpData::handleRead() {
       }
       else
       {
-        cout << "state_ == STATE_ANALYSIS" << endl;
+        //cout << "state_ == STATE_ANALYSIS" << endl;
         error_ = true;
         break;
       }
@@ -902,7 +902,7 @@ AnalysisState HttpData::analysisRequest()
       //printf("file mmap :OX%p\n",*mmapRet);
       if (*mmapRet == (void *) - 1) {
         mmapRet = nullptr;
-        cout << "filename: " << filename_full << endl;
+        //cout << "filename: " << filename_full << endl;
         perror("munmap failed");
         outBuffer_.clear();
         handleError(fd_, 404, "Not Found!");
@@ -1013,7 +1013,7 @@ void HttpData::handleClose() { //关闭的条件有两个，1超时（实际上�
 }
 
 void HttpData::newEvent() {
-  cout << "new sock is coming to thread!" << " " << channel_->getFd() << endl;
+  //cout << "new sock is coming to thread!" << " " << channel_->getFd() << endl;
   channel_->setEvents(DEFAULT_EVENT);
   loop_->addToPoller(channel_, DEFAULT_EXPIRED_TIME);
 }

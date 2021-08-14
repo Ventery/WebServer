@@ -44,7 +44,7 @@ EventLoop::EventLoop()
 void EventLoop::handleConn() {
   // poller_->epoll_mod(wakeupFd_, pwakeupChannel_, (EPOLLIN | EPOLLET |
   // EPOLLONESHOT), 0);
-  //updatePoller(pwakeupChannel_, 0);
+  updatePoller(pwakeupChannel_, 0);
 }
 
 EventLoop::~EventLoop() {
@@ -80,15 +80,9 @@ void EventLoop::runInLoop(Functor&& cb) {
 }
 
 void EventLoop::queueInLoop(Functor&& cb) {
-  cout<<"queueInLoop ing "<<endl;
-  cout<<"queueInLoop this "<<(void *)this<<endl;
-  cout<<"tid : "<<CurrentThread::tid()<<endl;
   {
     MutexLockGuard lock(mutex_);
-  cout<<"queueInLoop ing 2"<<endl;
     pendingFunctors_.emplace_back(std::move(cb));//右值为参数时候push_back也行，内部调用的也是emplace_back。只是直接emplace_back少一层调用快一点
-    cout<<"queueInLoop ing 3"<<endl;
-    cout<<"pendingFunctors_ size "<<pendingFunctors_.size()<<endl;
   }
 
   if (!isInLoopThread() || callingPendingFunctors_) wakeup();
@@ -105,11 +99,9 @@ void EventLoop::loop() { //在哪个线程建立的对象，就在哪个线程�
     // cout << "doing" << endl;
     ret.clear();
     ret = poller_->poll();
-    cout<<"epoll return num :"<<ret.size()<<endl;
     eventHandling_ = true;
     for (auto& it : ret) it->handleEvents();
     eventHandling_ = false;
-    cout<<"pendingFunctors_ size: "<<pendingFunctors_.size()<<endl;
     doPendingFunctors();
     poller_->handleExpired();
   }
@@ -117,11 +109,9 @@ void EventLoop::loop() { //在哪个线程建立的对象，就在哪个线程�
 }
 
 void EventLoop::doPendingFunctors() {
-  cout<<"doPendingFunctors this "<<(void *)this<<endl;
-  cout<<"tid : "<<CurrentThread::tid()<<endl;
-
   std::vector<Functor> functors;
   callingPendingFunctors_ = true;
+
   {
     MutexLockGuard lock(mutex_);
     functors.swap(pendingFunctors_);
