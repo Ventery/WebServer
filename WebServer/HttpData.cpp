@@ -817,9 +817,9 @@ AnalysisState HttpData::analysisRequest()
         else
         {
           stat((application_path_prefix + file_lists[num]).c_str(), &tp_sbuf);
-          if (tp_sbuf.st_size < 200 * 1024)
+          if (tp_sbuf.st_size < 200 * 1024 && file_lists[num].c_str()[0] != '.')//去除过大的文件和开头为.的文件，另外如果是二进制文件浏览器通常会直接下载
             TITLE += std::string("<object width=\"1000\" height=\"800\" data=\"") + std::string("/source.txt?") + application_path_prefix + file_lists[num] + "\"></object><br>";
-          else TITLE += "文件过大无法预览<br>";
+          else TITLE += "文件无法预览<br>";
         }
       }
       CONTENT += "<a>共" + to_string(file_lists.size() + 1) + "项</a><br>";
