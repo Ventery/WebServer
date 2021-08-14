@@ -2,6 +2,7 @@
 
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT) 
 ![Build Status](https://api.travis-ci.com/Ventery/WebServer.svg?branch=master)](https://travis-ci.com/github/Ventery/WebServer)
+
 本项目为lin ya的[Webserver](https://github.com/linyacool/WebServer)的修改版本，这是一个优秀的高性能服务器。基本上来说，源自陈硕[muduo](https://github.com/chenshuo/muduo)早期版本的高性能网络库，提供了应用接口，不仅仅可以支持http服务，应用部分与服务器部分耦合性极低，所以可以自由适应很多高并发的需求。它从功能上可以分为两部分，服务器与应用。本项目主要是对应用部分进行了功能扩充。
 本人在研究和学习其代码后，做出一定修改。在原本的http服务器的基础上，增加了文件浏览器的功能，还增加了图片浏览、文本浏览，音频和视频浏览的功能（使用浏览器原生播放器）。根本目的还是对网络部分进行学习，应用部分代码有诸多不规范之处，未来版本需要重构，但造轮子要适可而止。
 
