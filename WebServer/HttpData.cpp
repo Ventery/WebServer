@@ -710,6 +710,8 @@ std::string handle_size(double trans)
   result = to_string(trans);
   return result.substr(0, result.size() - 4) + suffix;
 }
+
+
 AnalysisState HttpData::analysisRequest()
 {
   //printf("analysisRequest!\n");
@@ -777,12 +779,14 @@ AnalysisState HttpData::analysisRequest()
     if (runMode &&  fileName_ == "index.html") { //处理html否则处理文件
       std::string TITLE, SUB_TITLE, CONTENT; //整个html分为head title content tail四部分
       int num;
+      bool is_random=false;
       auto it = Vedioname2Num.find(para_);
       if (it == Vedioname2Num.end()) //没有找到文件那就随机
       {
         if (file_lists.size())
           num = rand() % file_lists.size();
         else num = 0;
+        is_random=true;
       }
       else num = it->second;
       if (file_lists.size() && para_.empty() && getMime(file_lists[num]) != "video/mp4") //不是视频的话哪就从第一个读起，是视频的话那就随机
@@ -817,8 +821,8 @@ AnalysisState HttpData::analysisRequest()
         else
         {
           stat((application_path_prefix + file_lists[num]).c_str(), &tp_sbuf);
-          if (tp_sbuf.st_size < 200 * 1024 && file_lists[num].c_str()[0] != '.')//去除过大的文件和开头为.的文件，另外如果是二进制文件浏览器通常会直接下载
-            TITLE += std::string("<object width=\"1000\" height=\"800\" data=\"") + std::string("/source.txt?") + application_path_prefix + file_lists[num] + "\"></object><br>";
+          if (tp_sbuf.st_size < 200 * 1024 & !is_random) //去除过大的文件(超过200K),关闭随机展示，因为如果是二进制文件浏览器通常会直接下载而不是展示，就很麻烦
+            TITLE += std::string("<object width=\"1000\" height=\"450\" data=\"") + std::string("/source.txt?") + application_path_prefix + file_lists[num] + "\"></object><br>";
           else TITLE += "文件无法预览<br>";
         }
       }
