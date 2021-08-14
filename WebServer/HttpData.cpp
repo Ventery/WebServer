@@ -253,7 +253,7 @@ void HttpData::handleRead() {
   do {
     bool zero = false;
     int read_num = readn(fd_, inBuffer_, zero);
-    LOG << channel_->getFd()<<"  :"<<"Request( " << read_num << " bytes ):\n" << inBuffer_;
+    LOG << channel_->getFd() << "  :" << "Request( " << read_num << " bytes ):\n" << inBuffer_;
     if (connectionState_ == H_DISCONNECTING) {
       inBuffer_.clear();
       break;
@@ -817,9 +817,9 @@ AnalysisState HttpData::analysisRequest()
         else
         {
           stat((application_path_prefix + file_lists[num]).c_str(), &tp_sbuf);
-          if (tp_sbuf.st_size<2*1024)
-            TITLE+=string("<object width="1000" data=\"")+std::string("/source.txt?") + application_path_prefix + file_lists[num]+"\"></object>";
-          else TITLE+="文件过大无法预览";
+          if (tp_sbuf.st_size < 2 * 1024)
+            TITLE += std::string("<object width="1000" data=\"") + std::string("/source.txt?") + application_path_prefix + file_lists[num] + "\"></object>";
+          else TITLE += "文件过大无法预览";
         }
       }
       CONTENT += "<a>共" + to_string(file_lists.size() + 1) + "项</a><br>";
@@ -1009,7 +1009,7 @@ void HttpData::handleClose() { //关闭的条件有两个，1超时（实际上�
 }
 
 void HttpData::newEvent() {
-  cout<<"new sock is coming to thread!" <<" "<<channel_->getFd()<<endl;
+  cout << "new sock is coming to thread!" << " " << channel_->getFd() << endl;
   channel_->setEvents(DEFAULT_EVENT);
   loop_->addToPoller(channel_, DEFAULT_EXPIRED_TIME);
 }
