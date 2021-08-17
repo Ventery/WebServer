@@ -779,14 +779,14 @@ AnalysisState HttpData::analysisRequest()
     if (runMode &&  fileName_ == "index.html") { //处理html否则处理文件
       std::string TITLE, SUB_TITLE, CONTENT; //整个html分为head title content tail四部分
       int num;
-      bool is_random=false;
+      bool is_random = false;
       auto it = Vedioname2Num.find(para_);
       if (it == Vedioname2Num.end()) //没有找到文件那就随机
       {
         if (file_lists.size())
           num = rand() % file_lists.size();
         else num = 0;
-        is_random=true;
+        is_random = true;
       }
       else num = it->second;
       if (file_lists.size() && para_.empty() && getMime(file_lists[num]) != "video/mp4") //不是视频的话哪就从第一个读起，是视频的话那就随机

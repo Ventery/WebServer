@@ -57,27 +57,26 @@ enum HttpMethod { METHOD_POST = 1, METHOD_GET, METHOD_HEAD };
 enum HttpVersion { HTTP_10 = 1, HTTP_11 };
 
 class MimeType {
- private:
+private:
   static void init();
   static std::unordered_map<std::string, std::string> mime;
   MimeType();
   MimeType(const MimeType &m);
 
- public:
+public:
   static std::string getMime(const std::string &suffix);
 
- private:
+private:
   static pthread_once_t once_control;
 };
 
 class HttpData : public std::enable_shared_from_this<HttpData> {
- public:
+public:
   HttpData(EventLoop *loop, int connfd);
-  ~HttpData() 
-  { 
-    int i=close(fd_); 
-    if (i<0) printf("close faild\n");
-    printf("in destructor %d closed!\n",fd_);
+  ~HttpData()
+  {
+    int i = close(fd_);
+    if (i < 0) printf("close faild\n");
   }
   void reset();
   void seperateTimer();
@@ -90,7 +89,7 @@ class HttpData : public std::enable_shared_from_this<HttpData> {
   void handleClose();
   void newEvent();
 
- private:
+private:
   EventLoop *loop_;
   std::shared_ptr<Channel> channel_;
   int fd_;
@@ -130,5 +129,5 @@ class HttpData : public std::enable_shared_from_this<HttpData> {
   URIState parseURI();
   HeaderState parseHeaders();
   AnalysisState analysisRequest();
-  friend void FindFiles(HttpData *,std::string ,std::vector<std::string> &);
+  friend void FindFiles(HttpData *, std::string , std::vector<std::string> &);
 };
