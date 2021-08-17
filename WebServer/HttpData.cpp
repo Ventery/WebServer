@@ -498,6 +498,16 @@ redo: //printf("%sfileName_:%s\n",is_decode?"Decoded:":"Not Decoded",fileName_.c
           __pos = fileName_.size(); //string::find没找到就返回string::npos，值为-1，我们设定为没找到就返回size()
 
         }
+        else 
+        {
+            string tmp = fileName_.substr(0, __pos);
+            if (tmp.find("source.")!=std::string::npos)//这里是对source文件的解析，否则是对indix.html即是目录的解析，那就需要很多系统调用了
+            {
+              filename_full = fileName_.substr(__pos);
+              fileName_ = fileName_.substr(0, __pos);              
+              goto skip_point_0; 
+            }
+        }
         if (__pos + 1 >= fileName_.size()) //没有para_
         {
           setDefault();
@@ -569,6 +579,7 @@ redo: //printf("%sfileName_:%s\n",is_decode?"Decoded:":"Not Decoded",fileName_.c
 
   // cout << "fileName_: " << fileName_ << endl;
   // HTTP 版本号
+  skip_point_0:
   pos = request_line.find("/", pos);
   if (pos == std::string::npos)
     return PARSE_URI_ERROR;
@@ -850,8 +861,7 @@ AnalysisState HttpData::analysisRequest()
 
 //    Url_Decode_UTF8(para_);//url里的中文或者其他字符会被转义，这里将其转回来
     //这里开始是处理文件
-    if (runMode) filename_full = application_path_prefix + para_;
-    else filename_full = path_prefix + para_;
+
     if (stat(filename_full.c_str(), &sbuf) < 0) {
       header.clear();
       handleError(fd_, 404, "Not Found!");
