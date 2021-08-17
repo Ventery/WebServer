@@ -253,7 +253,7 @@ void HttpData::handleRead() {
   do {
     bool zero = false;
     int read_num = readn(fd_, inBuffer_, zero);
-    LOG << channel_->getFd() <<" read_num : "<<read_num<<" zero : "<<zero<< "  :" << "Request( " << read_num << " bytes ):\n" << inBuffer_;
+    //LOG << channel_->getFd() <<" read_num : "<<read_num<<" zero : "<<zero<< "  :" << "Request( " << read_num << " bytes ):\n" << inBuffer_;
     if (connectionState_ == H_DISCONNECTING) {
       inBuffer_.clear();
       break;
@@ -289,7 +289,7 @@ void HttpData::handleRead() {
         break;
       else if (flag == PARSE_URI_ERROR) {
         perror("PARSE_URI_ERROR");
-        LOG << "FD = " << fd_ << "," << inBuffer_ << "******";
+        //LOG << "FD = " << fd_ << "," << inBuffer_ << "******";
         inBuffer_.clear();
         error_ = true;
         handleError(fd_, 400, "Bad Request");
@@ -398,7 +398,7 @@ void HttpData::handleWrite() {
 }
 
 void HttpData::handleConn() {
-  LOG<<"handleConn :\n"<<"fd : "<<channel_->getFd()<<" error_ : "<<error_<<" connectionState_ : "<<connectionState_;
+  //LOG<<"handleConn :\n"<<"fd : "<<channel_->getFd()<<" error_ : "<<error_<<" connectionState_ : "<<connectionState_;
   seperateTimer();
   __uint32_t &events_ = channel_->getEvents();
   if (!error_ && connectionState_ == H_CONNECTED) { //正常无错误
