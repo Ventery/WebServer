@@ -938,7 +938,7 @@ AnalysisState HttpData::analysisRequest()
           //printf("open: %s success\n",filename_full.c_str());
           mmapRet = make_shared<void*>(mmap(NULL, sbuf.st_size, PROT_READ, MAP_PRIVATE, src_fd, 0));
           close(src_fd);
-          printf("video mmap :OX%p\n", *mmapRet);
+          //printf("video mmap :OX%p\n", *mmapRet);
           if (*mmapRet == (void *) - 1) {
             munmap(*mmapRet, sbuf.st_size);
             mmapRet = nullptr;
@@ -949,7 +949,7 @@ AnalysisState HttpData::analysisRequest()
           }
           videoFilename2mapp[filename_full] = mmapRet; //是视频的话就把映射存起来
         }
-        printf("%s:use_count:%d\n", filename_full.c_str(), mmapRet.use_count());
+        //printf("%s:use_count:%d\n", filename_full.c_str(), mmapRet.use_count());
       }
       char *src_addr = static_cast<char *>(*mmapRet);
       outBuffer_ += string(src_addr + from, length); //视频的range请求就分片
