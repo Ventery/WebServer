@@ -355,7 +355,6 @@ static int bench(void)
 
     /* check avaibility of target server */
     i=Socket(proxyhost==NULL?host:proxyhost,proxyport);
-    printf("proxyhost :%d   proxyport :%d\n",proxyhost,proxyport);
     if(i<0) { 
         fprintf(stderr,"\nConnect to server failed. Aborting benchmark.\n");
         return 1;

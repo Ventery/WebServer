@@ -398,6 +398,7 @@ void HttpData::handleWrite() {
 }
 
 void HttpData::handleConn() {
+  LOG<<"handleConn :\n"<<"fd : "<<channel_->getFd()<<" error_ : "<<error_<<" connectionState_ : "<<connectionState_;
   seperateTimer();
   __uint32_t &events_ = channel_->getEvents();
   if (!error_ && connectionState_ == H_CONNECTED) { //正常无错误
