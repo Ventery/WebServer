@@ -504,7 +504,7 @@ redo: //printf("%sfileName_:%s\n",is_decode?"Decoded:":"Not Decoded",fileName_.c
             if (tmp.find("source.")!=std::string::npos)//这里是对source文件的解析，否则是对indix.html即是目录的解析，那就需要很多系统调用了
             {
               filename_full = fileName_.substr(__pos);
-              fileName_ = fileName_.substr(0, __pos);              
+              fileName_ = tmp;              
               goto skip_point_0; 
             }
         }
@@ -864,6 +864,7 @@ AnalysisState HttpData::analysisRequest()
 
     if (stat(filename_full.c_str(), &sbuf) < 0) {
       header.clear();
+      cout<<"filename : "<<filename_full<<endl;
       handleError(fd_, 404, "Not Found!");
       return ANALYSIS_ERROR;
     }
@@ -906,6 +907,7 @@ AnalysisState HttpData::analysisRequest()
 
       if (src_fd < 0) {
         outBuffer_.clear();
+        cout<<"filename : "<<filename_full<<endl;
         handleError(fd_, 404, "Not Found!");
         return ANALYSIS_ERROR;
       }
@@ -915,6 +917,7 @@ AnalysisState HttpData::analysisRequest()
         mmapRet = nullptr;
         //cout << "filename: " << filename_full << endl;
         perror("munmap failed");
+        cout<<"filename : "<<filename_full<<endl;
         outBuffer_.clear();
         handleError(fd_, 404, "Not Found!");
         return ANALYSIS_ERROR;
@@ -943,6 +946,7 @@ AnalysisState HttpData::analysisRequest()
 
           if (src_fd < 0) {
             outBuffer_.clear();
+            cout<<"filename : "<<filename_full<<endl;
             handleError(fd_, 404, "Not Found!");
             return ANALYSIS_ERROR;
           }
@@ -955,6 +959,7 @@ AnalysisState HttpData::analysisRequest()
             mmapRet = nullptr;
             perror("munmap failed");
             outBuffer_.clear();
+            cout<<"filename : "<<filename_full<<endl;
             handleError(fd_, 404, "Not Found!");
             return ANALYSIS_ERROR;
           }
