@@ -568,7 +568,7 @@ void benchcore(const char *host,const int port,const char *req)
                 {
                     if(timerexpired) break; 
                     i=read(s,buf,1500);
-                    printf("%d\n",i);
+                    //printf("%d\n",i);
                     if(i<0) 
                     { 
                         failed++;
