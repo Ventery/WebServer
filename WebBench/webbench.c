@@ -560,7 +560,6 @@ void benchcore(const char *host,const int port,const char *req)
             s=Socket(host,port);        
             if(s<0) { failed++;continue;} 
             if(rlen!=write(s,req,rlen)) {failed++;close(s);continue;}
-            if(http10==0) 
             if(shutdown(s,1)) { failed++;close(s);continue;}
             if(force==0) 
             {
