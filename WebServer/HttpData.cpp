@@ -253,7 +253,7 @@ void HttpData::handleRead() {
   do {
     bool zero = false;
     int read_num = readn(fd_, inBuffer_, zero);
-    LOG << channel_->getFd() <<" read_num : "<<read_num<<" zero : "<<zero<< "  :" << "Request( " << read_num << " bytes ):\n" << inBuffer_;
+    LOG << channel_->getFd() << " read_num : " << read_num << " zero : " << zero << "  :" << "Request( " << read_num << " bytes ):\n" << inBuffer_;
     if (connectionState_ == H_DISCONNECTING) {
       inBuffer_.clear();
       break;
@@ -398,7 +398,7 @@ void HttpData::handleWrite() {
 }
 
 void HttpData::handleConn() {
-  LOG<<"handleConn :\n"<<"fd : "<<channel_->getFd()<<" error_ : "<<error_<<" connectionState_ : "<<connectionState_;
+  LOG << "handleConn :\n" << "fd : " << channel_->getFd() << " error_ : " << error_ << " connectionState_ : " << connectionState_;
   seperateTimer();
   __uint32_t &events_ = channel_->getEvents();
   if (!error_ && connectionState_ == H_CONNECTED) { //正常无错误
@@ -418,14 +418,13 @@ void HttpData::handleConn() {
       // events_ |= (EPOLLIN | EPOLLET | EPOLLONESHOT);
       int timeout = DEFAULT_KEEP_ALIVE_TIME;
       loop_->updatePoller(channel_, timeout);
-    } else {    //继续读，表示当前http没读完
+    } else {    //短连接
       // cout << "close normally" << endl;
-      // loop_->shutdown(channel_);
-      // loop_->runInLoop(bind(&HttpData::handleClose, shared_from_this()));
-      events_ |= (EPOLLIN | EPOLLET);
-      // events_ |= (EPOLLIN | EPOLLET | EPOLLONESHOT);
-      int timeout = (DEFAULT_KEEP_ALIVE_TIME >> 1);
-      loop_->updatePoller(channel_, timeout);
+      loop_->shutdown(channel_);
+      loop_->runInLoop(bind(&HttpData::handleClose, shared_from_this()));
+      //events_ |= (EPOLLIN | EPOLLET);
+      //int timeout = (DEFAULT_KEEP_ALIVE_TIME >> 1);
+      //loop_->updatePoller(channel_, timeout);
     }
   } else if (!error_ && connectionState_ == H_DISCONNECTING &&
              (events_ & EPOLLOUT)) //可能在递归的时候突然断开，且还没写完，不能直接结束
@@ -498,15 +497,15 @@ redo: //printf("%sfileName_:%s\n",is_decode?"Decoded:":"Not Decoded",fileName_.c
           __pos = fileName_.size(); //string::find没找到就返回string::npos，值为-1，我们设定为没找到就返回size()
 
         }
-        else 
+        else
         {
-            string tmp = fileName_.substr(0, __pos);
-            if (tmp.find("source.")!=std::string::npos)//这里是对source文件的解析，否则是对indix.html即是目录的解析，那就需要很多系统调用了
-            {
-              filename_full = fileName_.substr(__pos+1);
-              fileName_ = tmp;              
-              goto skip_point_0; 
-            }
+          string tmp = fileName_.substr(0, __pos);
+          if (tmp.find("source.") != std::string::npos) //这里是对source文件的解析，否则是对indix.html即是目录的解析，那就需要很多系统调用了
+          {
+            filename_full = fileName_.substr(__pos + 1);
+            fileName_ = tmp;
+            goto skip_point_0;
+          }
         }
         if (__pos + 1 >= fileName_.size()) //没有para_
         {
@@ -579,7 +578,7 @@ redo: //printf("%sfileName_:%s\n",is_decode?"Decoded:":"Not Decoded",fileName_.c
 
   // cout << "fileName_: " << fileName_ << endl;
   // HTTP 版本号
-  skip_point_0:
+skip_point_0:
   pos = request_line.find("HTTP/", pos);
   if (pos == std::string::npos)
     return PARSE_URI_ERROR;
@@ -763,12 +762,13 @@ AnalysisState HttpData::analysisRequest()
     }
     else
       header += "HTTP/1.1 200 OK\r\n";
-    if (headers_.find("Connection") != headers_.end() &&
-        (headers_["Connection"] == "Keep-Alive" ||
-         headers_["Connection"] == "keep-alive")) {
-      keepAlive_ = true;
-      header += string("Connection: Keep-Alive\r\n") + "Keep-Alive: timeout=" +
-                to_string(DEFAULT_KEEP_ALIVE_TIME) + "\r\n";
+    if (headers_.find("Connection") != headers_.end() ) {
+      if ((headers_["Connection"] == "Keep-Alive" || headers_["Connection"] == "keep-alive")) //长连接
+      {
+        keepAlive_ = true;
+        header += string("Connection: Keep-Alive\r\n") + "Keep-Alive: timeout=" + to_string(DEFAULT_KEEP_ALIVE_TIME) + "\r\n";
+      }
+      else keepAlive_ = false;
     }
 
     // echo test
@@ -864,7 +864,7 @@ AnalysisState HttpData::analysisRequest()
 
     if (stat(filename_full.c_str(), &sbuf) < 0) {
       header.clear();
-      cout<<"filename : "<<filename_full<<endl;
+      cout << "filename : " << filename_full << endl;
       handleError(fd_, 404, "Not Found!");
       return ANALYSIS_ERROR;
     }
@@ -907,7 +907,7 @@ AnalysisState HttpData::analysisRequest()
 
       if (src_fd < 0) {
         outBuffer_.clear();
-        cout<<"filename : "<<filename_full<<endl;
+        cout << "filename : " << filename_full << endl;
         handleError(fd_, 404, "Not Found!");
         return ANALYSIS_ERROR;
       }
@@ -917,7 +917,7 @@ AnalysisState HttpData::analysisRequest()
         mmapRet = nullptr;
         //cout << "filename: " << filename_full << endl;
         perror("munmap failed");
-        cout<<"filename : "<<filename_full<<endl;
+        cout << "filename : " << filename_full << endl;
         outBuffer_.clear();
         handleError(fd_, 404, "Not Found!");
         return ANALYSIS_ERROR;
@@ -946,7 +946,7 @@ AnalysisState HttpData::analysisRequest()
 
           if (src_fd < 0) {
             outBuffer_.clear();
-            cout<<"filename : "<<filename_full<<endl;
+            cout << "filename : " << filename_full << endl;
             handleError(fd_, 404, "Not Found!");
             return ANALYSIS_ERROR;
           }
@@ -959,7 +959,7 @@ AnalysisState HttpData::analysisRequest()
             mmapRet = nullptr;
             perror("munmap failed");
             outBuffer_.clear();
-            cout<<"filename : "<<filename_full<<endl;
+            cout << "filename : " << filename_full << endl;
             handleError(fd_, 404, "Not Found!");
             return ANALYSIS_ERROR;
           }

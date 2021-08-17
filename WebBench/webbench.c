@@ -448,7 +448,7 @@ static int bench(void)
         while(1)
         {
             pid=fscanf(f,"%d %d %d",&i,&j,&k);
-            printf("%d %d %d \n",i,j,k);
+            //printf("%d %d %d \n",i,j,k);
             //printf("Children %d :    speed:%d      failed:%d     bytes:%d\n",clients,i,j,k);
             if(pid<2)
             {
