@@ -26,7 +26,7 @@ const int DEFAULT_KEEP_ALIVE_TIME = 15 * 1000;  // ms
 const long RESPOND_LENGTH = 20 * 1024 * 1024; //bytes
 const int CACHE_CONTROL = 60 * 30; //seconds
 
-const std::string HTML_DOMAIN = "http://175.27.133.90:39000/";
+const std::string HTML_DOMAIN = "http://192.168.2.111:39000/";
 const std::string HTML_HEAD = "<!DOCTYPE html><html><head><meta charset=\"utf-8\">";
 const std::string HTML_TAIL = "</body></html>";
 
@@ -580,14 +580,14 @@ redo: //printf("%sfileName_:%s\n",is_decode?"Decoded:":"Not Decoded",fileName_.c
   // cout << "fileName_: " << fileName_ << endl;
   // HTTP 版本号
   skip_point_0:
-  pos = request_line.find("/", pos);
+  pos = request_line.find("HTTP/", pos);
   if (pos == std::string::npos)
     return PARSE_URI_ERROR;
   else {
-    if (request_line.size() - pos <= 3)
+    if (request_line.size() - pos < 8)
       return PARSE_URI_ERROR;
     else {
-      string ver = request_line.substr(pos + 1, 3);
+      string ver = request_line.substr(pos + 5, 3);
       if (ver == "1.0")
         HTTPVersion_ = HTTP_10;
       else if (ver == "1.1")
@@ -772,7 +772,7 @@ AnalysisState HttpData::analysisRequest()
     }
 
     // echo test
-    if (fileName_ == "hello") {
+    if (filename_full == "hello") {
       outBuffer_ =
         "HTTP/1.1 200 OK\r\nContent-type: text/plain\r\nContent-Length: 12\r\n\r\nHello World\r\n";
       return ANALYSIS_SUCCESS;
