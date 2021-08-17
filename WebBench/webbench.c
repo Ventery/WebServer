@@ -308,6 +308,7 @@ void build_request(const char *url)
         // printf("ProxyHost=%s\nProxyPort=%d\n",proxyhost,proxyport);
         strcat(request,url);
     }
+    printf("host : %s\n",host);
 
     if(http10==1)
         strcat(request," HTTP/1.0");
