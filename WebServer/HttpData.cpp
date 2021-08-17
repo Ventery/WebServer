@@ -987,7 +987,7 @@ void HttpData::handleClose() { //关闭的条件有两个，1超时（实际上�
   {
     weak_ptr<void*> tpr = mmapRet;
     mmapRet = nullptr;
-    printf("%s:use_count:%d\n", filename_full.c_str(), tpr.use_count());
+    //printf("%s:use_count:%d\n", filename_full.c_str(), tpr.use_count());
     MutexLockGuard gard(videoFilename2mapp_lock);//临界区保护videoFilename2mapp
     if (videoFilename2mapp.find(filename_full) != videoFilename2mapp.end() && videoFilename2mapp[filename_full].unique())
     {

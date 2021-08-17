@@ -44,7 +44,7 @@ EventLoop::EventLoop()
 void EventLoop::handleConn() {
   // poller_->epoll_mod(wakeupFd_, pwakeupChannel_, (EPOLLIN | EPOLLET |
   // EPOLLONESHOT), 0);
-  updatePoller(pwakeupChannel_, 0);
+  //updatePoller(pwakeupChannel_, 0);
 }
 
 EventLoop::~EventLoop() {
