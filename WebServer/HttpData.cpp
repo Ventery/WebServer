@@ -420,12 +420,12 @@ void HttpData::handleConn() {
       loop_->updatePoller(channel_, timeout);
     } else {    //
       // cout << "close normally" << endl;
-      // loop_->shutdown(channel_);
-      // loop_->runInLoop(bind(&HttpData::handleClose, shared_from_this()));
-      events_ |= (EPOLLIN | EPOLLET);
+       loop_->shutdown(channel_);//这两行就是说如果请求HTTP里面没有显式说明要求keep_alive，那么就默认是短链接。其实现在来说我们都默认是长链接，这里这么写还是为了测试短链接的效率
+       loop_->runInLoop(bind(&HttpData::handleClose, shared_from_this()));
+      //events_ |= (EPOLLIN | EPOLLET);
       // events_ |= (EPOLLIN | EPOLLET | EPOLLONESHOT);
-      int timeout = (DEFAULT_KEEP_ALIVE_TIME >> 1);
-      loop_->updatePoller(channel_, timeout);
+      //int timeout = (DEFAULT_KEEP_ALIVE_TIME >> 1);
+      //loop_->updatePoller(channel_, timeout);
     }
   } else if (!error_ && connectionState_ == H_DISCONNECTING &&
              (events_ & EPOLLOUT)) //可能在递归的时候突然断开，且还没写完，不能直接结束
