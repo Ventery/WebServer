@@ -503,7 +503,7 @@ redo: //printf("%sfileName_:%s\n",is_decode?"Decoded:":"Not Decoded",fileName_.c
             string tmp = fileName_.substr(0, __pos);
             if (tmp.find("source.")!=std::string::npos)//这里是对source文件的解析，否则是对indix.html即是目录的解析，那就需要很多系统调用了
             {
-              filename_full = fileName_.substr(__pos);
+              filename_full = fileName_.substr(__pos+1);
               fileName_ = tmp;              
               goto skip_point_0; 
             }
