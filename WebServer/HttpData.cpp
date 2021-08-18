@@ -685,14 +685,19 @@ HeaderState HttpData::parseHeaders() {
     }
     case H_END_LF: {
       notFinish = false;
+      key_start = i;
+      now_read_line_begin = i + 1;
       break;
     }
     }
   }
   if (hState_ == H_END_LF) {
-    str = str.substr(i+1);
+    str = str.substr(i);
     return PARSE_HEADER_SUCCESS;
   }
+  if (now_read_line_begin < str.size()) //修复了每次读一行header导致的bug
+    str = str.substr(now_read_line_begin);
+  else str.clear();
   return PARSE_HEADER_AGAIN;
 }
 std::string handle_size(double trans)
