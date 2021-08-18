@@ -443,7 +443,6 @@ void HttpData::handleConn() {
 URIState HttpData::parseURI() {
   //printf("parseURI\n");
   string &str = inBuffer_;
-  string cop = str;
   // 读到完整的请求行再开始解析请求
   size_t pos = str.find('\r\n', nowReadPos_);
   if (pos == std::string::npos) {
@@ -686,7 +685,6 @@ HeaderState HttpData::parseHeaders() {
     case H_END_LF: {
       notFinish = false;
       key_start = i;
-      now_read_line_begin = i + 1;
       break;
     }
     }
@@ -695,9 +693,6 @@ HeaderState HttpData::parseHeaders() {
     str = str.substr(i);
     return PARSE_HEADER_SUCCESS;
   }
-  if (now_read_line_begin < str.size()) //修复了每次读一行header导致的bug
-    str = str.substr(now_read_line_begin);
-  else str.clear();
   return PARSE_HEADER_AGAIN;
 }
 std::string handle_size(double trans)
