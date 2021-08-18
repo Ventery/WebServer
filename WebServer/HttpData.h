@@ -110,6 +110,7 @@ private:
   int if_Ranges_;//支持google浏览器的播放器拖动
   int src_fd;
   std::shared_ptr<void*> mmapRet;//是一个指向指针的指针，获取所指的指针应该用*操作符
+  std::map<std::string , std::shared_ptr<void *>> mmap_local;//本类使用到的映射几何，析构的时候删掉
   struct stat sbuf;
   std::string para_;
   std::string filename_full;//文件的全名（带绝对路径）

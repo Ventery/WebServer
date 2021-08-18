@@ -421,8 +421,8 @@ void HttpData::handleConn() {
       loop_->updatePoller(channel_, timeout);
     } else {    //
       // cout << "close normally" << endl;
-       loop_->shutdown(channel_);//这两行就是说如果请求HTTP里面没有显式说明要求keep_alive，那么就默认是短链接。其实现在来说我们都默认是长链接，这里这么写还是为了测试短链接的效率
-       loop_->runInLoop(bind(&HttpData::handleClose, shared_from_this()));
+      loop_->shutdown(channel_);//这两行就是说如果请求HTTP里面没有显式说明要求keep_alive，那么就默认是短链接。其实现在来说我们都默认是长链接，这里这么写还是为了测试短链接的效率
+      loop_->runInLoop(bind(&HttpData::handleClose, shared_from_this()));
       //events_ |= (EPOLLIN | EPOLLET);
       // events_ |= (EPOLLIN | EPOLLET | EPOLLONESHOT);
       //int timeout = (DEFAULT_KEEP_ALIVE_TIME >> 1);
@@ -472,7 +472,7 @@ URIState HttpData::parseURI() {
     pos = posHead;
     method_ = METHOD_HEAD;
   } else {
-    cout<<request_line<<endl;
+    cout << request_line << endl;
     return PARSE_URI_ERROR;
   }
 
@@ -501,15 +501,15 @@ redo: //printf("%sfileName_:%s\n",is_decode?"Decoded:":"Not Decoded",fileName_.c
           __pos = fileName_.size(); //string::find没找到就返回string::npos，值为-1，我们设定为没找到就返回size()
 
         }
-        else 
+        else
         {
-            string tmp = fileName_.substr(0, __pos);
-            if (tmp.find("source.")!=std::string::npos)//这里是对source文件的解析，否则是对indix.html即是目录的解析，那就需要很多系统调用了
-            {
-              filename_full = fileName_.substr(__pos+1);
-              fileName_ = tmp;              
-              goto skip_point_0; 
-            }
+          string tmp = fileName_.substr(0, __pos);
+          if (tmp.find("source.") != std::string::npos) //这里是对source文件的解析，否则是对indix.html即是目录的解析，那就需要很多系统调用了
+          {
+            filename_full = fileName_.substr(__pos + 1);
+            fileName_ = tmp;
+            goto skip_point_0;
+          }
         }
         if (__pos + 1 >= fileName_.size()) //没有para_
         {
@@ -582,7 +582,7 @@ redo: //printf("%sfileName_:%s\n",is_decode?"Decoded:":"Not Decoded",fileName_.c
 
   // cout << "fileName_: " << fileName_ << endl;
   // HTTP 版本号
-  skip_point_0:
+skip_point_0:
   pos = request_line.find("HTTP/", pos);
   if (pos == std::string::npos)
     return PARSE_URI_ERROR;
@@ -689,7 +689,7 @@ HeaderState HttpData::parseHeaders() {
   }
   //cout<<str<<endl;
   if (hState_ == H_END_LF) {
-    str = i<str.size()?str.substr(i-1):str.substr(i);
+    str = i < str.size() ? str.substr(i - 1) : str.substr(i);
     return PARSE_HEADER_SUCCESS;
   }
   return PARSE_HEADER_AGAIN;
@@ -766,7 +766,7 @@ AnalysisState HttpData::analysisRequest()
         keepAlive_ = true;
         header += string("Connection: Keep-Alive\r\n") + "Keep-Alive: timeout=" + to_string(DEFAULT_KEEP_ALIVE_TIME) + "\r\n";
       }
-      else keepAlive_=false;
+      else keepAlive_ = false;
     }
 
     // echo test
@@ -862,7 +862,7 @@ AnalysisState HttpData::analysisRequest()
 
     if (stat(filename_full.c_str(), &sbuf) < 0) {
       header.clear();
-      cout<<"filename : "<<filename_full<<endl;
+      cout << "filename : " << filename_full << endl;
       handleError(fd_, 404, "Not Found!");
       return ANALYSIS_ERROR;
     }
@@ -899,13 +899,14 @@ AnalysisState HttpData::analysisRequest()
     //如果请求的是其他格式比如html或者图片，则浏览器只发一次请求，服务器应当直接返回请求资源
     //视频有两种头，第一种是第一次发送的不带range的，在前面那一行就返回了，用于请求视频长度
     //第二种头是带range的，还有直接请求资源的，均可以运行下面代码
+    mmapRet.reset();
     if (!if_Ranges_)//请求的是资源文件
     {
       src_fd = open(filename_full.c_str(), O_RDONLY, 0);
 
       if (src_fd < 0) {
         outBuffer_.clear();
-        cout<<"filename : "<<filename_full<<endl;
+        cout << "filename : " << filename_full << endl;
         handleError(fd_, 404, "Not Found!");
         return ANALYSIS_ERROR;
       }
@@ -915,7 +916,7 @@ AnalysisState HttpData::analysisRequest()
         mmapRet = nullptr;
         //cout << "filename: " << filename_full << endl;
         perror("munmap failed");
-        cout<<"filename : "<<filename_full<<endl;
+        cout << "filename : " << filename_full << endl;
         outBuffer_.clear();
         handleError(fd_, 404, "Not Found!");
         return ANALYSIS_ERROR;
@@ -927,7 +928,7 @@ AnalysisState HttpData::analysisRequest()
       //printf("file munmap :OX%p\n",*mmapRet);
       if (ret < 0)
         perror("munmap failed!");
-      mmapRet = nullptr;
+      mmapRet.reset();
       return ANALYSIS_SUCCESS;
     }
     else //请求的是视频文件
@@ -935,16 +936,14 @@ AnalysisState HttpData::analysisRequest()
       {
         MutexLockGuard gard(videoFilename2mapp_lock);//临界区保护videoFilename2mapp
         if (videoFilename2mapp.find(filename_full) != videoFilename2mapp.end()) //看看所需文件是否已经被映射过了
-        {
           mmapRet = videoFilename2mapp[filename_full];
-        }
         if (!mmapRet)//只要还没完成映射，就打开文件开始映射
         {
           src_fd = open(filename_full.c_str(), O_RDONLY, 0);
 
           if (src_fd < 0) {
             outBuffer_.clear();
-            cout<<"filename : "<<filename_full<<endl;
+            cout << "filename : " << filename_full << endl;
             handleError(fd_, 404, "Not Found!");
             return ANALYSIS_ERROR;
           }
@@ -954,10 +953,10 @@ AnalysisState HttpData::analysisRequest()
           //printf("video mmap :OX%p\n", *mmapRet);
           if (*mmapRet == (void *) - 1) {
             munmap(*mmapRet, sbuf.st_size);
-            mmapRet = nullptr;
+            mmapRet.reset();
             perror("munmap failed");
             outBuffer_.clear();
-            cout<<"filename : "<<filename_full<<endl;
+            cout << "filename : " << filename_full << endl;
             handleError(fd_, 404, "Not Found!");
             return ANALYSIS_ERROR;
           }
@@ -965,7 +964,10 @@ AnalysisState HttpData::analysisRequest()
         }
         //printf("%s:use_count:%d\n", filename_full.c_str(), mmapRet.use_count());
       }
+      if (mmap_local.find(filename_full) == mmap_local.end())
+        mmap_local[filename_full] = mmapRet;
       char *src_addr = static_cast<char *>(*mmapRet);
+      mmapRet.reset();
       outBuffer_ += string(src_addr + from, length); //视频的range请求就分片
       return ANALYSIS_SUCCESS;
     }
@@ -997,25 +999,32 @@ void HttpData::handleError(int fd, int err_num, string short_msg) {
 
 void HttpData::handleClose() { //关闭的条件有两个，1超时（实际上只有pop了才算真正删除），2解析出错
   //cout<<"Close!!!!" <<channel_->getFd()<<endl;
-  if (mmapRet)//此处才真正关闭视频文件的映射
+
+  if (mmap_local.size())//此处才真正关闭视频文件的映射
   {
-    weak_ptr<void*> tpr = mmapRet;
-    mmapRet = nullptr;
-    //printf("%s:use_count:%d\n", filename_full.c_str(), tpr.use_count());
     MutexLockGuard gard(videoFilename2mapp_lock);//临界区保护videoFilename2mapp
-    if (videoFilename2mapp.find(filename_full) != videoFilename2mapp.end() && videoFilename2mapp[filename_full].unique())
+    std::set<std::string> mmap_name_set;
+    for (auto it : mmap_local)
+      mmap_name_set.insert(it.first);
+    mmap_local.clear();
+
+    for (auto it : mmap_name_set )
     {
-      void *mmapRet_t = *videoFilename2mapp[filename_full];
-      int ret = munmap(mmapRet_t, sbuf.st_size);
-      if (ret < 0)
+      string &filename_full = it;
+      if (videoFilename2mapp[filename_full].unique())
       {
-        perror("munmap failed!");
-        printf("OX%p %d\n", mmapRet_t, sbuf.st_size);
-      }
-      else
-      {
-        videoFilename2mapp.erase(filename_full);
-        printf("%s:deleted!\n", filename_full.c_str());
+        void *mmapRet_t = *videoFilename2mapp[filename_full];
+        int ret = munmap(mmapRet_t, sbuf.st_size);
+        if (ret < 0)
+        {
+          perror("munmap failed!");
+          printf("OX%p %d\n", mmapRet_t, sbuf.st_size);
+        }
+        else
+        {
+          videoFilename2mapp.erase(filename_full);
+          printf("%s:deleted!\n", filename_full.c_str());
+        }
       }
     }
   }
