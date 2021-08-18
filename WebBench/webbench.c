@@ -108,7 +108,7 @@ static void usage(void)
             "  -p|--proxy <server:port> Use proxy server for request.\n"
             "  -c|--clients <n>         Run <n> HTTP clients at once. Default one.\n"
             "  -k|--keep                Keep-Alive\n"
-            "  -j|--big file trans      test file transmission\n"
+            "  -d|--big file trans      test file transmission\n"
             "  -9|--http09              Use HTTP/0.9 style requests.\n"
             "  -1|--http10              Use HTTP/1.0 protocol.\n"
             "  -2|--http11              Use HTTP/1.1 protocol.\n"
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
         return 2;
     }
 
-    while ((opt = getopt_long(argc, argv, "912Vfrt:p:c:?hkq:", long_options, &options_index)) != EOF )
+    while ((opt = getopt_long(argc, argv, "912Vfrt:p:c:?hkdq:", long_options, &options_index)) != EOF )
     {
         switch (opt)
         {
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
         case 'V': printf(PROGRAM_VERSION"\n"); exit(0);
         case 't': benchtime = atoi(optarg); break;
         case 'k': keep_alive = true; break;
-        case 'j': trans_data = true; break;
+        case 'd': trans_data = true; break;
         case 'q': term_time = atoi(optarg); break;
         case 'p':
             /* proxy server parsing server:port */
