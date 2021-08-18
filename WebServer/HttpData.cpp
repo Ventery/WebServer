@@ -253,7 +253,8 @@ void HttpData::handleRead() {
   do {
     bool zero = false;
     int read_num = readn(fd_, inBuffer_, zero);
-    //LOG << channel_->getFd() <<" read_num : "<<read_num<<" zero : "<<zero<< "  :" << "Request( " << read_num << " bytes ):\n" << inBuffer_;
+    cout << channel_->getFd() <<" read_num : "<<read_num<<" zero : "<<zero<< "  :" << "Request( " << read_num << " bytes ):\n" << inBuffer_;
+    cout<<endl;
     if (connectionState_ == H_DISCONNECTING) {
       inBuffer_.clear();
       break;
@@ -684,13 +685,12 @@ HeaderState HttpData::parseHeaders() {
     }
     case H_END_LF: {
       notFinish = false;
-      key_start = i;
       break;
     }
     }
   }
   if (hState_ == H_END_LF) {
-    str = str.substr(i);
+    str = str.substr(i+1);
     return PARSE_HEADER_SUCCESS;
   }
   return PARSE_HEADER_AGAIN;
