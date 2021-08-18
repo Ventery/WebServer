@@ -342,7 +342,7 @@ void build_request(const char *url)
             strcat(request, "Connection: Keep-Alive\r\n");
     }
     if (trans_data)
-            strcat(request, "Range: bytes=0-20971520\r\n");//默认传20M
+            strcat(request, "Range: bytes=0-20971519\r\n");//默认传20M
 
 
     /* add empty line at end */
