@@ -687,14 +687,9 @@ HeaderState HttpData::parseHeaders() {
     }
     }
   }
-  cout<<hState_<<" "<<i<<" "<<str.c_str()[i-1] <<str.c_str()[i]<<endl;
-  cout<<(int)str.c_str()[i-1]<<" "<<(int)str.c_str()[i]<<endl;
-  cout<<(int)str.c_str()[0]<<endl;
-  cout<<str.size()<<endl;
-  cout<<"------------"<<endl;
   //cout<<str<<endl;
   if (hState_ == H_END_LF) {
-    str = str.substr(i);
+    str = i<str.size()?str.substr(i-1):str.substr(i);
     return PARSE_HEADER_SUCCESS;
   }
   return PARSE_HEADER_AGAIN;
