@@ -28,9 +28,9 @@
 #include <stdbool.h>
 /* values */
 volatile int timerexpired = 0;
-int speed = 0;
-int failed = 0;
-int bytes = 0;
+long speed = 0;
+long failed = 0;
+long bytes = 0;
 
 /* globals */
 int http10 = 1; /* 0 - http/0.9, 1 - http/1.0, 2 - http/1.1 */
@@ -354,7 +354,7 @@ void build_request(const char *url)
 /* vraci system rc error kod */
 static int bench(void)
 {
-    int i, j, k;
+    long  i, j, k;
     pid_t pid = 0;
     FILE *f;
 
@@ -452,7 +452,7 @@ static int bench(void)
 
         while (1)
         {
-            pid = fscanf(f, "%d %d %d", &i, &j, &k);
+            pid = fscanf(f, "%ld %ld %ld", &i, &j, &k);
             //printf("%d %d %d \n",i,j,k);
             //printf("Children %d :    speed:%d      failed:%d     bytes:%d\n",clients,i,j,k);
             if (pid < 2)
@@ -470,9 +470,9 @@ static int bench(void)
         }
         fclose(f);
 
-        printf("\nSpeed=%d pages/min, %d bytes/sec.\nRequests: %d susceed, %d failed.\n",
-               (int)((speed + failed) / (benchtime / 60.0f)),
-               (int)(bytes / (float)benchtime),
+        printf("\nSpeed=%ld pages/min, %ld bytes/sec.\nRequests: %ld susceed, %ld failed.\n",
+               (long)((speed + failed) / (benchtime / 60.0f)),
+               (long)(bytes / (float)benchtime),
                speed,
                failed);
     }
