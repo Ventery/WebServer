@@ -472,7 +472,6 @@ URIState HttpData::parseURI() {
     pos = posHead;
     method_ = METHOD_HEAD;
   } else {
-    cout<<
     return PARSE_URI_ERROR;
   }
 
