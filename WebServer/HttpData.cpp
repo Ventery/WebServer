@@ -691,6 +691,8 @@ HeaderState HttpData::parseHeaders() {
     }
     }
   }
+  cout<<hState_<<endl;
+  cout<<str<<endl;
   if (hState_ == H_END_LF) {
     str = str.substr(i);
     return PARSE_HEADER_SUCCESS;
