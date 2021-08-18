@@ -75,6 +75,7 @@ runmode为必填可以为1或者2或者3；
 ![](https://github.com/Ventery/WebServer/blob/master/picture/%E5%90%AF%E5%8A%A8%E5%91%BD%E4%BB%A4.png)
 
 首先是短连接和长连接的测试，测试目标为内存数据，这是为了减少磁盘io带来的开销专注于对request的反馈。
+
 短连接：
 ![](https://github.com/Ventery/WebServer/blob/master/picture/%E7%9F%AD%E8%BF%9E%E6%8E%A5.png)
 短连接时候CPU占用：
