@@ -472,6 +472,7 @@ URIState HttpData::parseURI() {
     pos = posHead;
     method_ = METHOD_HEAD;
   } else {
+    cout<<1<<endl;
     return PARSE_URI_ERROR;
   }
 
@@ -485,7 +486,10 @@ URIState HttpData::parseURI() {
   } else {
     size_t _pos = request_line.find(' ', pos);
     if (_pos == std::string::npos)
+    {
+          cout<<2<<endl;
       return PARSE_URI_ERROR;
+    }
     else {
       if (_pos - pos > 1) {
         fileName_ = request_line.substr(pos + 1, _pos - pos - 1);
