@@ -445,7 +445,7 @@ URIState HttpData::parseURI() {
   string &str = inBuffer_;
   string cop = str;
   // 读到完整的请求行再开始解析请求
-  size_t pos = str.find('\r', nowReadPos_);
+  size_t pos = str.find('\r\n', nowReadPos_);
   if (pos == std::string::npos) {
     return PARSE_URI_AGAIN;
   }
@@ -453,8 +453,8 @@ URIState HttpData::parseURI() {
   string request_line = str.substr(0, pos);
   //printf("%s\n",request_line.c_str());
 
-  if (str.size() > pos + 1)
-    str = str.substr(pos + 1);
+  if (str.size() > pos + 2)
+    str = str.substr(pos + 2);
   else
     str.clear();
   // Method
@@ -472,7 +472,7 @@ URIState HttpData::parseURI() {
     pos = posHead;
     method_ = METHOD_HEAD;
   } else {
-    cout<<1<<endl;
+    cout<<
     return PARSE_URI_ERROR;
   }
 
@@ -487,7 +487,6 @@ URIState HttpData::parseURI() {
     size_t _pos = request_line.find(' ', pos);
     if (_pos == std::string::npos)
     {
-          cout<<2<<endl;
       return PARSE_URI_ERROR;
     }
     else {
