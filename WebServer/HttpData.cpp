@@ -687,7 +687,7 @@ HeaderState HttpData::parseHeaders() {
     }
     }
   }
-  cout<<hState_<<" "<<str.c_str()[i-1] <<str.c_str()[i]<<endl;
+  cout<<hState_<<" "<<i<<" "<<str.c_str()[i-1] <<str.c_str()[i]<<endl;
   cout<<(int)str.c_str()[i-1]<<" "<<(int)str.c_str()[i]<<endl;
   //cout<<str<<endl;
   if (hState_ == H_END_LF) {
