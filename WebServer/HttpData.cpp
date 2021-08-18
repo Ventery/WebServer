@@ -612,7 +612,6 @@ HeaderState HttpData::parseHeaders() {
   //printf("parseHeaders!\n %s",inBuffer_.c_str());
   string &str = inBuffer_;
   int key_start = -1, key_end = -1, value_start = -1, value_end = -1;
-  int now_read_line_begin = 0;
   bool notFinish = true;
   size_t i = 0;
   HeaderState default_return = PARSE_HEADER_ERROR;
@@ -622,7 +621,6 @@ HeaderState HttpData::parseHeaders() {
       if (str[i] == '\n' || str[i] == '\r') break;
       hState_ = H_KEY;
       key_start = i;
-      now_read_line_begin = i;
       break;
     }
     case H_KEY: {
@@ -662,7 +660,6 @@ HeaderState HttpData::parseHeaders() {
         string value(str.begin() + value_start, str.begin() + value_end);
         headers_[key] = value;
         //printf("%s %s\n",key.c_str(),value.c_str());
-        now_read_line_begin = i + 1; ////修复了每次读一行header导致的bug
       } else
         return default_return;
       break;
@@ -686,20 +683,16 @@ HeaderState HttpData::parseHeaders() {
     case H_END_LF: {
       notFinish = false;
       key_start = i;
-      now_read_line_begin = i + 1;
       break;
     }
     }
   }
-  cout<<hState_<<" "<<str.c_str()[i-1] <<str.c_str()[i]<<endl;
+  cout<<hState_<<" "<<str.c_str()[i-2]<<str.c_str()[i-1] <<str.c_str()[i]<<endl;
   //cout<<str<<endl;
   if (hState_ == H_END_LF) {
     str = str.substr(i);
     return PARSE_HEADER_SUCCESS;
   }
-  if (now_read_line_begin < str.size()) //修复了每次读一行header导致的bug
-    str = str.substr(now_read_line_begin);
-  else str.clear();
   return PARSE_HEADER_AGAIN;
 }
 std::string handle_size(double trans)
