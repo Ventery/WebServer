@@ -7,6 +7,8 @@
 
 &nbsp; &nbsp; &nbsp; 本人在研究和学习其代码后，做出一定修改。在原本的http服务器的基础上，增加了文件浏览器的功能，还增加了图片浏览、文本浏览，音频和视频浏览的功能（使用浏览器原生播放器）。根本目的还是对网络部分进行学习，应用部分代码有诸多不规范之处，未来版本需要重构。
 
+&nbsp; &nbsp; &nbsp;[点击查看运行效果。](https://github.com/Ventery/WebServer#%E4%BA%8C%E8%BF%90%E8%A1%8C)
+
 ### 零、关于修改的部分。
 
 -	网络部分修改比较少，关于原理和详细强烈建议看lin ya的[Webserver](https://github.com/linyacool/WebServer)的md文档介绍，我这里修改主要是HTTP应用部分，虽然网络部分修改较少，但是关键部分都学到了。
