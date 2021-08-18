@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <functional>
 #include <map>
+#include <set>
 #include <memory>
 #include <vector>
 #include <string>
