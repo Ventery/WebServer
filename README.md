@@ -23,7 +23,7 @@
 ### 一、安装：
 
 -	解压，然后修改WebServer/HttpData.cpp。
-将HTML_DOMAIN修改为你自己的ip与port，ip为本地地址或者局域网地址均可，看你想从哪里访问。
+将HTML_DOMAIN修改为你自己的ip与port，ip为本地地址或者局域网地址均可，看你想从哪里访问。（To do：使用lua配置文件）
 将path_prefix与application_path_prefix1与application_path_prefix2修改为自己想默认访问的几个目录；
 
 -	运行命令./build.sh。
